@@ -1,0 +1,17 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+# Outputs
+cards.json
+summary.md

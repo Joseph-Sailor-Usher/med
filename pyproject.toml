@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "med"
+version = "0.1.0"
+description = "The Cognitive Mediator: a CLI to drive agentic workflows (Ollama) -- resolve intent to a JSON blueprint, dispatch, and verify."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Joseph Sailor Usher", email = "joseph@voidlore.com" }]
+keywords = ["cli", "llm", "ollama", "agents", "mcp", "flashcards", "fsrs"]
+classifiers = [
+    "Topic :: Software Development :: User Interfaces",
+    "Programming Language :: Python :: 3",
+]
+# No runtime dependencies -- stdlib only (urllib for Ollama).
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.4"]
+
+[project.scripts]
+med = "med.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["med*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

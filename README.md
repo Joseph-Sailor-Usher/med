@@ -59,6 +59,36 @@ med run "make 3 flashcards about X" --source note.md --out cards.json --json
 
 Exit codes: `0` all steps verified · `2` a hard step failed · `1` setup error.
 
+## Self-correction (verify → correct → verify)
+
+`med` does not just fail on bad output — it gives the model the failure
+reason and a bounded chance to fix it:
+
+```
+author (model step, retries=2)
+   attempt 0  ->  "min_items: 1 item(s) < required 4"
+   attempt 1  ->  same spec, with the rejection appended to the prompt
+   attempt 2  ->  (last attempt) still failing?  ->  step fails, run halts
+```
+
+```bash
+# default is 2 retries; override per-run:
+med run "make 4 flashcards ... " --source note.md --count 4 --retries 3
+```
+
+Rules:
+
+- Only **non-soft `model` steps** with a `retries` count in `params` retry.
+- The first *clean* attempt is the one that carries forward — retry output
+  never poisons a step that already passed.
+- Retries are bounded (the `attempts` counter) — no infinite loops.
+- `soft: true` steps record the failure and keep going (no retries by
+  default); hard steps stop the run with exit code `2`.
+
+The verifier's message is written for the *model*, not the human:
+`"min_items: required a JSON ARRAY of 4 objects but got a dict -- return
+ONLY an array like: [{front,back}, ...] (no wrapper object)"`.
+
 ## Resolve-only (see the Blueprint, don't execute)
 
 ```bash
